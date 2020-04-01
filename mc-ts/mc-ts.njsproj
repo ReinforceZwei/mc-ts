@@ -52,6 +52,12 @@
     <TypeScriptCompile Include="Commands\quit.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Commands\respawn.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="PacketHandler.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="utils\ChatParser.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

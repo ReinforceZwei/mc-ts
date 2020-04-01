@@ -26,6 +26,7 @@ const colors = {
     italic: '',
     reset: 'white+black_bg'
 };
+// for translate
 const dictionary = {
     'chat.stream.emote': '(%s) * %s %s',
     'chat.stream.text': '(%s) <%s> %s',
@@ -33,8 +34,17 @@ const dictionary = {
     'chat.type.admin': '[%s: %s]',
     'chat.type.announcement': '[%s] %s',
     'chat.type.emote': '* %s %s',
-    'chat.type.text': '<%s> %s'
+    'chat.type.text': '<%s> %s',
+    'commands.message.display.incoming': '%s whisper to you: %s',
+    'commands.message.display.outgoing': 'You whisper %s: %s',
+    'death.attack.player.item': '%s was slain by %s using %s',
+    'death.attack.player': '%s was slain by %s'
 };
+var partiallyMatch;
+(function (partiallyMatch) {
+    partiallyMatch["death"] = "death";
+})(partiallyMatch || (partiallyMatch = {}));
+// TODO: Implement translation
 function parseChat(chatObj, parentState) {
     function getColorize(parentState) {
         let myColor = '';
@@ -70,12 +80,20 @@ function parseChat(chatObj, parentState) {
         if ('text' in chatObj) {
             chat += color(chatObj.text, getColorize(parentState));
         }
-        else if ('translate' in chatObj && dictionary[chatObj.translate] !== undefined) {
-            const args = [dictionary[chatObj.translate]];
-            chatObj.with.forEach(function (s) {
-                args.push(parseChat(s, parentState));
-            });
-            chat += color(util.format.apply(this, args), getColorize(parentState));
+        else if ('translate' in chatObj) {
+            if (dictionary[chatObj.translate] !== undefined) {
+                const args = [dictionary[chatObj.translate]];
+                chatObj.with.forEach(function (s) {
+                    args.push(parseChat(s, parentState));
+                });
+                chat += color(util.format.apply(this, args), getColorize(parentState));
+            }
+            else {
+                console.log(chatObj.translate);
+                if (chatObj.translate.includes(partiallyMatch.death.toString())) {
+                    chat += 'You was dead';
+                }
+            }
         }
         if (chatObj.extra) {
             chatObj.extra.forEach(function (item) {

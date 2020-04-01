@@ -10,6 +10,9 @@ class Client {
     SendChat(text) {
         this.c.write('chat', { message: text });
     }
+    Respawn() {
+        this.c.write('client_command', { "actionId": 0 });
+    }
 }
 exports.default = Client;
 //# sourceMappingURL=Client.js.map

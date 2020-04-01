@@ -11,4 +11,7 @@ export default class Client {
     SendChat(text: string): void {
         this.c.write('chat', { message: text });
     }
+    Respawn(): void {
+        this.c.write('client_command', { "actionId": 0 });
+    }
 }
