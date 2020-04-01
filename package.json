@@ -1,0 +1,15 @@
+{
+  "name": "mc-ts",
+  "version": "0.0.0",
+  "description": "mc-ts",
+  "main": "app.js",
+  "author": {
+    "name": ""
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.14"
+  },
+  "dependencies": {
+    "minecraft-protocol": "^1.11.0"
+  }
+}
