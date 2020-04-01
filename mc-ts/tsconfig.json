@@ -5,7 +5,7 @@
         "lib": [ "es6" ],
         "sourceMap": true,
         "resolveJsonModule": true,
-        "outDir": "bin/build"
+        "outDir": "build"
     },
     "exclude": [
         "node_modules"
