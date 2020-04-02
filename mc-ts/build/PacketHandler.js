@@ -17,8 +17,8 @@ function OnConnect() {
     console.log('Successfully connected');
 }
 function OnChat(packet) {
-    //console.log(packet);
-    console.log(ChatParser_1.default(JSON.parse(packet.message), {}));
+    console.log(packet);
+    console.log(ChatParser_1.default(JSON.parse(packet.message)));
 }
 function OnDisconnect() {
     console.log('You have been disconnected from the server.');
