@@ -4,6 +4,7 @@ import * as mc from "minecraft-protocol";
 import Client from "./Client";
 import * as CommandHandler from './CommandHandler';
 import * as PacketHandler from './PacketHandler';
+import * as BotHandler from './BotHandler';
 
 let client: Client
 
@@ -86,6 +87,8 @@ stdin.addListener("data", (d: string) => {
 });
 
 CommandHandler.SetHandler(client);
+BotHandler.SetHandler(client);
+// packet handler must be the last
 PacketHandler.SetHandler(client);
 
 function AskLoginInfo() {

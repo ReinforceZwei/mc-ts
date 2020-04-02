@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const DataTypes_1 = require("./DataTypes");
 const ChatParser_1 = require("./utils/ChatParser");
 let client;
 function SetHandler(_client) {
@@ -10,14 +11,21 @@ function SetHandler(_client) {
     client.c.on("end", OnDisconnect);
     client.c.on('kick_disconnect', OnKick);
     client.c.on('error', OnError);
+    // for bots
+    client.c.on('login', OnLogin);
+    client.c.on('spawn_entity', OnSpawnEntity);
+    client.c.on('spawn_entity_living', OnSpawnEntity);
+    client.c.on('rel_entity_move', OnEntityMove);
+    client.c.on('entity_move_look', OnEntityMove);
+    client.c.on('entity_destroy', OnDestroyEntity);
 }
 exports.SetHandler = SetHandler;
 // Events that must be handled
 function OnConnect() {
-    console.log('Successfully connected');
+    console.log('Connected, joining...');
 }
 function OnChat(packet) {
-    console.log(packet);
+    //console.log(packet);
     console.log(ChatParser_1.default(JSON.parse(packet.message)));
 }
 function OnDisconnect() {
@@ -29,5 +37,56 @@ function OnKick(packet) {
 }
 function OnError(err) {
     console.error(err.message);
+}
+// variables
+// Entity handling
+let Entities = new Array();
+// Events for bots to work
+function OnLogin(packet) {
+    console.log('Successfully joined');
+    client.bots.forEach(e => {
+        e.OnLogin(packet.entityId);
+    });
+}
+function OnSpawnEntity(packet) {
+    let EntityID = packet.entityId;
+    let type = packet.type;
+    let X = packet.x;
+    let Y = packet.y;
+    let Z = packet.z;
+    let location = new DataTypes_1.Location(X, Y, Z);
+    let entity = new DataTypes_1.Entity(EntityID, location, type);
+    //Entities.splice(EntityID, 0, entity);
+    Entities[EntityID] = entity;
+    client.bots.forEach(e => {
+        e.OnSpawnEntity(entity);
+    });
+}
+function OnEntityMove(packet) {
+    let EntityID = packet.entityId;
+    if (Entities[EntityID]) {
+        let Dx = packet.dX;
+        let Dy = packet.dY;
+        let Dz = packet.dZ;
+        let location = new DataTypes_1.Location(Dx, Dy, Dz);
+        let l = Entities[EntityID].location;
+        l.X += Dx;
+        l.Y += Dy;
+        l.Z += Dz;
+        Entities[EntityID].location = l;
+        client.bots.forEach(e => {
+            e.OnEntityMove(Entities[EntityID]);
+        });
+    }
+}
+function OnEntityTeleport(packet) {
+    // TODO: fuck my life
+}
+function OnDestroyEntity(packet) {
+    let EntitiesID = packet.entityIds;
+    EntitiesID.forEach(ID => {
+        if (Entities[ID])
+            Entities.splice(ID, 1);
+    });
 }
 //# sourceMappingURL=PacketHandler.js.map

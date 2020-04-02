@@ -1,0 +1,26 @@
+﻿import Client from './Client';
+import * as Bots from './Bots';
+import Bot from './Bot';
+let client: Client;
+let bots: Array<Bot> = new Array<Bot>();
+function SetHandler(_client: Client) {
+    client = _client;
+    LoadBot(new Bots.AutoFish());
+    // Load more bot here
+    //LoadBot(new Bots.MyBot());
+
+    InitializeBots();
+    client.bots = bots;
+}
+export { SetHandler }
+
+function LoadBot(b: Bot) {
+    bots.push(b);
+}
+
+function InitializeBots() {
+    bots.forEach(e => {
+        e.SetHandler(client);
+        e.Initialize();
+    })
+}

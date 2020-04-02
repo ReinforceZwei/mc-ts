@@ -6,6 +6,7 @@ const mc = require("minecraft-protocol");
 const Client_1 = require("./Client");
 const CommandHandler = require("./CommandHandler");
 const PacketHandler = require("./PacketHandler");
+const BotHandler = require("./BotHandler");
 let client;
 let username;
 let password;
@@ -91,6 +92,8 @@ stdin.addListener("data", (d) => {
     process.stdout.write("\r\x1b[K");
 });
 CommandHandler.SetHandler(client);
+BotHandler.SetHandler(client);
+// packet handler must be the last
 PacketHandler.SetHandler(client);
 function AskLoginInfo() {
     username = readlineSync.question("Email (or username for offline mode): ");
