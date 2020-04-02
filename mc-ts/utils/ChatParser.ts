@@ -124,7 +124,6 @@ export default function ParseChat(chat: ChatObject, parentStyle?: { colors?:Arra
                     args.push(ParseChat(e));
                 });
             }
-            console.log(args);
             text.push(util.format(Translation[chat.translate].replace(/%\d\$s/gm, '%s'), ...args));
         } else {
             return color(Translation[chat.translate].replace(/%\d\$s/gm, '%s'), colors.concat(style).join('+'));

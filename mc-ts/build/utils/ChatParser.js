@@ -143,7 +143,6 @@ function ParseChat(chat, parentStyle) {
                     args.push(ParseChat(e));
                 });
             }
-            console.log(args);
             text.push(util.format(Translation[chat.translate].replace(/%\d\$s/gm, '%s'), ...args));
         }
         else {
