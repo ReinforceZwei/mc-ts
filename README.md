@@ -1,5 +1,5 @@
 # mc-ts
-A Minecraft Console Client written in TypeScript.
+A Minecraft Console Client written in TypeScript.\
 This project is still developing.
 
 This client uses `minecraft-protocol` package.

@@ -1,7 +1,7 @@
 # mc-ts
  How to use?
  ---
- This project is still developing, and may contains bugs.
+ This project is still developing, and may contains bugs.\
  If you wish to use it anyway, please follow the steps below.
  1. Make sure you have Node.js installed
  2. Install [minecraft-protocol](https://github.com/PrismarineJS/node-minecraft-protocol)
