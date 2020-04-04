@@ -12,16 +12,24 @@ function SetHandler(_client: Client) {
     client.c.on('error', OnError);
     // for bots
     client.c.on('login', OnLogin);
+    client.c.on('position', OnPosition);
     client.c.on('spawn_entity', OnSpawnEntity);
     client.c.on('spawn_entity_living', OnSpawnEntity);
     client.c.on('rel_entity_move', OnEntityMove);
     client.c.on('entity_move_look', OnEntityMove);
+    client.c.on('entity_teleport', OnEntityTeleport);
     client.c.on('entity_destroy', OnDestroyEntity);
 }
 export { SetHandler }
 // Events that must be handled
 function OnConnect() {
     console.log('Connected, joining...');
+}
+function OnLogin(packet) {
+    console.log('Successfully joined');
+    client.bots.forEach(e => {
+        e.OnLogin(packet.entityId);
+    })
 }
 function OnChat(packet: any) {
     //console.log(packet);
@@ -43,11 +51,13 @@ function OnError(err: Error) {
 let Entities: Array<Entity> = new Array<Entity>();
 
 // Events for bots to work
-function OnLogin(packet) {
-    console.log('Successfully joined');
-    client.bots.forEach(e => {
-        e.OnLogin(packet.entityId);
-    })
+function OnPosition(packet) {
+    let x = packet.x;
+    let y = packet.y;
+    let z = packet.z;
+    let location: Location = new Location(x, y, z);
+    client.playerLocation = location;
+    client.c.write('teleport_confirm', { teleportId: packet.teleportId });
 }
 function OnSpawnEntity(packet) {
     let EntityID: number = packet.entityId;
@@ -66,10 +76,9 @@ function OnSpawnEntity(packet) {
 function OnEntityMove(packet) {
     let EntityID: number = packet.entityId;
     if (Entities[EntityID]) {
-        let Dx: number = packet.dX;
-        let Dy: number = packet.dY;
-        let Dz: number = packet.dZ;
-        let location: Location = new Location(Dx, Dy, Dz);
+        let Dx: number = packet.dX / (128 * 32);
+        let Dy: number = packet.dY / (128 * 32);
+        let Dz: number = packet.dZ / (128 * 32);
         let l: Location = Entities[EntityID].location;
         l.X += Dx;
         l.Y += Dy;
@@ -81,11 +90,27 @@ function OnEntityMove(packet) {
     }
 }
 function OnEntityTeleport(packet) {
-    // TODO: fuck my life
+    let EntityID: number = packet.entityId;
+    if (Entities[EntityID]) {
+        let x: number = packet.x;
+        let y: number = packet.y;
+        let z: number = packet.z;
+        Entities[EntityID].location = new Location(x, y, z);
+        client.bots.forEach(e => {
+            e.OnEntityMove(Entities[EntityID]);
+        });
+    }
 }
 function OnDestroyEntity(packet) {
     let EntitiesID: Array<number> = packet.entityIds;
     EntitiesID.forEach(ID => {
-        if (Entities[ID]) Entities.splice(ID, 1);
+        if (Entities[ID]) {
+            client.bots.forEach(e => {
+                let tmp: Entity = new Entity(Entities[ID].ID, Entities[ID].location, Entities[ID].typeID);
+                e.OnDestroyEntity(tmp);
+            });
+            //Entities.splice(ID, 1);
+            delete Entities[ID];
+        }
     })
 }

@@ -13,6 +13,19 @@ class Client {
     Respawn() {
         this.c.write('client_command', { "actionId": 0 });
     }
+    Move(location) {
+        let packet = {
+            x: location.X,
+            y: location.Y,
+            z: location.Z,
+            onGround: true
+        };
+        this.c.write('position', packet);
+        this.playerLocation = location;
+    }
+    UseItem(hand = 0) {
+        this.c.write('use_item', { "hand": hand });
+    }
 }
 exports.default = Client;
 //# sourceMappingURL=Client.js.map

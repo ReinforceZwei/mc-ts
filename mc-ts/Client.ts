@@ -1,5 +1,6 @@
 ﻿import * as mc from "minecraft-protocol";
 import Bot from './Bot';
+import { Location } from "./DataTypes";
 
 /**
  * Extens default Client methods
@@ -7,6 +8,7 @@ import Bot from './Bot';
 export default class Client {
     c: mc.Client;
     bots: Bot[];
+    playerLocation: Location;
     constructor(client: mc.Client) {
         this.c = client;
     }
@@ -15,5 +17,18 @@ export default class Client {
     }
     Respawn(): void {
         this.c.write('client_command', { "actionId": 0 });
+    }
+    Move(location: Location) {
+        let packet = {
+            x: location.X,
+            y: location.Y,
+            z: location.Z,
+            onGround: true
+        }
+        this.c.write('position', packet);
+        this.playerLocation = location;
+    }
+    UseItem(hand: number = 0) {
+        this.c.write('use_item', { "hand": hand });
     }
 }
