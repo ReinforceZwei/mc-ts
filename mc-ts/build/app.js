@@ -7,6 +7,7 @@ const Client_1 = require("./Client");
 const CommandHandler = require("./CommandHandler");
 const PacketHandler = require("./PacketHandler");
 const BotHandler = require("./BotHandler");
+const JsonIO_1 = require("./utils/JsonIO");
 let client;
 let username;
 let password;
@@ -42,7 +43,7 @@ if (args.length) {
 }
 else {
     if (fs.existsSync('./setting.json')) {
-        config = require('./settings.json');
+        config = JsonIO_1.default.read('./setting.json');
         if (config.username)
             username = config.username;
         if (config.password) {

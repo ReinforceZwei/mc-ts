@@ -5,6 +5,7 @@ import Client from "./Client";
 import * as CommandHandler from './CommandHandler';
 import * as PacketHandler from './PacketHandler';
 import * as BotHandler from './BotHandler';
+import JsonIO from './utils/JsonIO';
 
 let client: Client
 
@@ -44,7 +45,7 @@ if (args.length) {
     }
 } else {
     if (fs.existsSync('./setting.json')) {
-        config = require('./settings.json');
+        config = JsonIO.read('./setting.json');
         if (config.username) username = config.username;
         if (config.password) { password = config.password } else offline = true;
         if (config.host) host = config.host;

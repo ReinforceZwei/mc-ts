@@ -87,6 +87,9 @@
     <TypeScriptCompile Include="utils\GetDirFiles.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="utils\JsonIO.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Commands\" />
