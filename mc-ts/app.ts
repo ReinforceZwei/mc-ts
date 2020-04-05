@@ -83,12 +83,12 @@ if (CheckInfo()) {
 let stdin: NodeJS.Socket = process.openStdin();
 stdin.addListener("data", (d: string) => {
     CommandHandler.OnCommand(d.toString().trim());
-    process.stdout.write("\r\x1b[K");
+    //process.stdout.write("\r\x1b[K");
 });
 
 CommandHandler.SetHandler(client);
 BotHandler.SetHandler(client);
-// packet handler must be the last
+// packet handler must be the last to set
 PacketHandler.SetHandler(client);
 
 function AskLoginInfo() {
