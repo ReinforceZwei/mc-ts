@@ -1,6 +1,7 @@
 ﻿import Client from './Client';
 import { Entity, Location } from './DataTypes';
 import ChatParser from './utils/ChatParser';
+import * as console from './utils/ConsoleIO2';
 let client: Client;
 function SetHandler(_client: Client) {
     client = _client;
@@ -43,7 +44,7 @@ function OnKick(packet: any) {
     console.log("Kicked for reason: " + packet.reason);
 }
 function OnError(err: Error) {
-    console.error(err.message);
+    console.log(err.message);
 }
 
 // variables

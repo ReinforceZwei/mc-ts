@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const console = require("../utils/ConsoleIO2");
 let name = 'move';
 exports.name = name;
 function run(args, client) {

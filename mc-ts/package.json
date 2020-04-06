@@ -10,7 +10,6 @@
     "@types/node": "^8.0.14"
   },
   "dependencies": {
-    "ansi-color": "^0.2.1",
     "minecraft-protocol": "^1.11.0",
     "readline-sync": "^1.4.10"
   }

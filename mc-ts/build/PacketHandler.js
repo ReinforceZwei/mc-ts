@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const DataTypes_1 = require("./DataTypes");
 const ChatParser_1 = require("./utils/ChatParser");
+const console = require("./utils/ConsoleIO2");
 let client;
 function SetHandler(_client) {
     client = _client;
@@ -44,7 +45,7 @@ function OnKick(packet) {
     console.log("Kicked for reason: " + packet.reason);
 }
 function OnError(err) {
-    console.error(err.message);
+    console.log(err.message);
 }
 // variables
 // Entity handling

@@ -1,5 +1,4 @@
-﻿const color = require('ansi-color').set
-//const util = require('util')
+﻿import color from './AnsiColor';
 import * as util from 'util';
 let Translation = require('../lang/zh_tw.json');
 
@@ -33,14 +32,14 @@ interface hoverEvent {
 }
 enum Colors {
     black = 'black+white_bg',
-    dark_blue = 'blue',
-    dark_green = 'green',
-    dark_aqua = 'cyan',
-    dark_red = 'red',
-    dark_purple = 'magenta',
+    dark_blue = 'dark_blue',
+    dark_green = 'dark_green',
+    dark_aqua = 'dark_aqua',
+    dark_red = 'dark_red',
+    dark_purple = 'dark_purple',
     gold = 'yellow',
-    gray = 'black+white_bg',
-    dark_gray = 'black+white_bg',
+    gray = 'gray',
+    dark_gray = 'gray',
     blue = 'blue',
     green = 'green',
     aqua = 'cyan',
@@ -62,19 +61,21 @@ export default function ParseChat(chat: ChatObject, parentStyle?: { colors?:Arra
     let colors: Array<string> = new Array<string>(); // color stack, clear on new style
     let style: Array<string> = new Array<string>(); // style stack, clear on new style
     let text: Array<string> = new Array<string>(); // will store with color code
-    if (chat.bold) style.push(Styles.bold);
-    if (chat.italic) style.push(Styles.italic);
-    if (chat.underlined) style.push(Styles.underlined);
-    if (chat.strikethrough) style.push(Styles.strikethrough);
-    if (chat.obfuscated) style.push(Styles.obfuscated);
-    if (chat.color) style.push(Colors[chat.color]);
 
     if (parentStyle && (parentStyle.colors.length > 0 || parentStyle.style.length > 0)) {
         colors = colors.concat(parentStyle.colors);
         style = style.concat(parentStyle.style);
     }
+
+    if (chat.bold) style.push(Styles.bold);
+    if (chat.italic) style.push(Styles.italic);
+    if (chat.underlined) style.push(Styles.underlined);
+    if (chat.strikethrough) style.push(Styles.strikethrough);
+    if (chat.obfuscated) style.push(Styles.obfuscated);
+    if (chat.color) colors.push(Colors[chat.color]);
+    
     if (colors.length > 1) colors.shift();
-    if (style.length > 1) style.shift();
+    //if (style.length > 1) style.shift();
     if (chat.text) {
         // handle § color
         if (chat.text.match(oldColorCodeReg)) {
@@ -113,32 +114,21 @@ export default function ParseChat(chat: ChatObject, parentStyle?: { colors?:Arra
         }
     }
     if (chat.translate) {
+        let translatedText = Translation[chat.translate].replace(/%\d\$s/gm, '%s');
         if (chat.with) {
             let args: Array<string> = new Array<string>();
-            if (colors.length > 0 || style.length > 0) {
-                chat.with.forEach(e => {
-                    args.push(ParseChat(e, { colors, style }));
-                });
-            } else {
-                chat.with.forEach(e => {
-                    args.push(ParseChat(e));
-                });
-            }
-            text.push(util.format(Translation[chat.translate].replace(/%\d\$s/gm, '%s'), ...args));
+            chat.with.forEach(e => {
+                args.push(ParseChat(e));
+            });
+            text.push(color(util.format(translatedText, ...args), colors.concat(style).join('+')));
         } else {
-            return color(Translation[chat.translate].replace(/%\d\$s/gm, '%s'), colors.concat(style).join('+'));
+            text.push(color(translatedText, colors.concat(style).join('+')));
         }
     }
     if (chat.extra) {
-        if (colors.length > 0 || style.length > 0) {
-            chat.extra.forEach(e => {
-                text.push(ParseChat(e, { colors, style }));
-            });
-        } else {
-            chat.extra.forEach(e => {
-                text.push(ParseChat(e));
-            });
-        }
+        chat.extra.forEach(e => {
+            text.push(ParseChat(e, { colors, style }));
+        });
     }
     return text.join(' ');
 }

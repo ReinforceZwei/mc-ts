@@ -5,6 +5,10 @@ This project is still developing.
 This client uses `minecraft-protocol` package.
 Please check it out at [here](https://github.com/PrismarineJS/node-minecraft-protocol)
 
+### Important information for Windows users
+If the chat messages on you console appears like a mess,
+please consider using other console program like [ConEmu](https://conemu.github.io/).
+
 Features
 -
 * Auto fishing

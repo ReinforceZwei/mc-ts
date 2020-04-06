@@ -8,6 +8,7 @@ const CommandHandler = require("./CommandHandler");
 const PacketHandler = require("./PacketHandler");
 const BotHandler = require("./BotHandler");
 const JsonIO_1 = require("./utils/JsonIO");
+const console = require("./utils/ConsoleIO2");
 let client;
 let username;
 let password;
@@ -17,6 +18,10 @@ let offline = false;
 let config;
 setTerminalTitle("MC-TS");
 process.title = "MC-TS";
+console.OnLine(d => {
+    CommandHandler.OnCommand(d.toString().trim());
+});
+console.setPrefix('> ');
 let args = process.argv.slice(2);
 if (args.length) {
     switch (args.length) {
@@ -86,16 +91,38 @@ else {
     console.log("Still did not get enough infomation, exiting...");
     process.exit(1);
 }
+/*
 // listen console input
-let stdin = process.openStdin();
-stdin.addListener("data", (d) => {
+let stdin: NodeJS.Socket = process.openStdin();
+stdin.addListener("data", (d: string) => {
     CommandHandler.OnCommand(d.toString().trim());
     //process.stdout.write("\r\x1b[K");
 });
+
+let rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    terminal: true
+});
+rl.prompt();
+rl.on('line', (d: string) => {
+    CommandHandler.OnCommand(d.toString().trim());
+    //rl.prompt();
+}).on('close', () => {
+    client.c.end('User terminate');
+    process.exit(0);
+});
+setInterval(() => {
+    rl.pause();
+    rl.write('LOLOLOL\n');
+    rl.resume();
+}, 5000);
+*/
 CommandHandler.SetHandler(client);
 BotHandler.SetHandler(client);
 // packet handler must be the last to set
 PacketHandler.SetHandler(client);
+console.start();
 function AskLoginInfo() {
     username = readlineSync.question("Email (or username for offline mode): ");
     let _password = readlineSync.question("Password (input '-' for offline mode): ", { hideEchoBack: true });

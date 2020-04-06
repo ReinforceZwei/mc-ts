@@ -1,6 +1,7 @@
 ﻿import Bot from '../Bot';
 import { Entity, Location } from '../DataTypes';
 import { setTimeout } from 'timers';
+import * as console from '../utils/ConsoleIO2';
 export default class AutoFish extends Bot {
     fishingRod: Entity = new Entity(0, new Location(0, 0, 0), 0);
     lastPos: Location;

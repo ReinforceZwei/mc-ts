@@ -1,11 +1,13 @@
 ﻿import * as fs from 'fs';
 import * as readlineSync from 'readline-sync';
+import * as readline from 'readline';
 import * as mc from "minecraft-protocol";
 import Client from "./Client";
 import * as CommandHandler from './CommandHandler';
 import * as PacketHandler from './PacketHandler';
 import * as BotHandler from './BotHandler';
 import JsonIO from './utils/JsonIO';
+import * as console from './utils/ConsoleIO2';
 
 let client: Client
 
@@ -19,6 +21,11 @@ let config: any;
 
 setTerminalTitle("MC-TS");
 process.title = "MC-TS";
+
+console.OnLine(d => {
+    CommandHandler.OnCommand(d.toString().trim());
+});
+console.setPrefix('> ');
 
 let args: string[] = process.argv.slice(2);
 if (args.length) {
@@ -79,7 +86,7 @@ if (CheckInfo()) {
     process.exit(1);
 }
 
-
+/*
 // listen console input
 let stdin: NodeJS.Socket = process.openStdin();
 stdin.addListener("data", (d: string) => {
@@ -87,10 +94,34 @@ stdin.addListener("data", (d: string) => {
     //process.stdout.write("\r\x1b[K");
 });
 
+let rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    terminal: true
+});
+rl.prompt();
+rl.on('line', (d: string) => {
+    CommandHandler.OnCommand(d.toString().trim());
+    //rl.prompt();
+}).on('close', () => {
+    client.c.end('User terminate');
+    process.exit(0);
+});
+setInterval(() => {
+    rl.pause();
+    rl.write('LOLOLOL\n');
+    rl.resume();
+}, 5000);
+*/
+
+
+
 CommandHandler.SetHandler(client);
 BotHandler.SetHandler(client);
 // packet handler must be the last to set
 PacketHandler.SetHandler(client);
+
+console.start();
 
 function AskLoginInfo() {
     username = readlineSync.question("Email (or username for offline mode): ");

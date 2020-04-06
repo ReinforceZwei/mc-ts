@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Bot_1 = require("../Bot");
 const DataTypes_1 = require("../DataTypes");
 const timers_1 = require("timers");
+const console = require("../utils/ConsoleIO2");
 class AutoFish extends Bot_1.default {
     constructor() {
         super(...arguments);
