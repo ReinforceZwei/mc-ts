@@ -50,4 +50,11 @@ export default abstract class Bot {
      * @param Entity
      */
     OnEntityMove(Entity: Entity): void { }
+
+    /**
+     * Called on client player properties changed
+     * Modifiers were applied
+     * @param properties
+     */
+    OnEntityProperties(properties: Array<any>): void { }
 }

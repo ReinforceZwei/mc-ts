@@ -1,2 +1,3 @@
 ﻿import AutoFish from './AutoFish';
-export { AutoFish }
+import AutoAttack from './AutoAttack';
+export { AutoFish, AutoAttack }

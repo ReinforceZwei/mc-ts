@@ -42,6 +42,12 @@ class Bot {
      * @param Entity
      */
     OnEntityMove(Entity) { }
+    /**
+     * Called on client player properties changed
+     * Modifiers were applied
+     * @param properties
+     */
+    OnEntityProperties(properties) { }
 }
 exports.default = Bot;
 //# sourceMappingURL=Bot.js.map

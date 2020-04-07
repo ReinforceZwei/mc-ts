@@ -6,6 +6,7 @@ let bots = new Array();
 function SetHandler(_client) {
     client = _client;
     LoadBot(new Bots.AutoFish());
+    LoadBot(new Bots.AutoAttack());
     // Load more bot here
     //LoadBot(new Bots.MyBot());
     InitializeBots();

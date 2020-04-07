@@ -116,7 +116,8 @@ stdin.on("data", (key) => {
 
 export function writeln(msg) {
     writeRaw("\r\x1b[K");
-    writeRaw(msg + '\n');
+    //writeRaw(msg + '\n');
+    console.log(msg);
     writeRaw(prefix);
     writeRaw(buffer + buffer2);
     setCursor()

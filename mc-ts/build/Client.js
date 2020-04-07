@@ -26,6 +26,9 @@ class Client {
     UseItem(hand = 0) {
         this.c.write('use_item', { "hand": hand });
     }
+    InteractEntity(ID, type = 1) {
+        this.c.write('use_entity', { target: ID, mouse: type });
+    }
 }
 exports.default = Client;
 //# sourceMappingURL=Client.js.map

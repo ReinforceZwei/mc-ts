@@ -47,6 +47,9 @@
     <TypeScriptCompile Include="BotHandler.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Bots\AutoAttack.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Bots\AutoFish.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

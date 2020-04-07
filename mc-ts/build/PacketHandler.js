@@ -15,12 +15,15 @@ function SetHandler(_client) {
     // for bots
     client.c.on('login', OnLogin);
     client.c.on('position', OnPosition);
+    // entity related
     client.c.on('spawn_entity', OnSpawnEntity);
     client.c.on('spawn_entity_living', OnSpawnEntity);
     client.c.on('rel_entity_move', OnEntityMove);
     client.c.on('entity_move_look', OnEntityMove);
     client.c.on('entity_teleport', OnEntityTeleport);
     client.c.on('entity_destroy', OnDestroyEntity);
+    // entity_update_attributes
+    client.c.on('entity_update_attributes', OnEntityProperties);
 }
 exports.SetHandler = SetHandler;
 // Events that must be handled
@@ -29,6 +32,7 @@ function OnConnect() {
 }
 function OnLogin(packet) {
     console.log('Successfully joined');
+    client.playerID = packet.entityId;
     client.bots.forEach(e => {
         e.OnLogin(packet.entityId);
     });
@@ -59,6 +63,7 @@ function OnPosition(packet) {
     client.playerLocation = location;
     client.c.write('teleport_confirm', { teleportId: packet.teleportId });
 }
+// entity related
 function OnSpawnEntity(packet) {
     let EntityID = packet.entityId;
     let type = packet.type;
@@ -113,5 +118,33 @@ function OnDestroyEntity(packet) {
             delete Entities[ID];
         }
     });
+}
+//
+function OnEntityProperties(packet) {
+    if (packet.entityId == client.playerID) {
+        // apply modifiers
+        packet.properties.forEach(prop => {
+            if (prop.modifiers.length > 0) {
+                // operation
+                prop.modifiers.forEach(e => {
+                    switch (e.operation) {
+                        case 0:
+                            prop.value += e.amount;
+                            break;
+                        case 1:
+                            prop.value += (e.amount / 100);
+                            break;
+                        case 2:
+                            prop.value *= e.amount;
+                            break;
+                    }
+                });
+            }
+            delete prop.modifiers;
+        });
+        client.bots.forEach(e => {
+            e.OnEntityProperties(packet.properties);
+        });
+    }
 }
 //# sourceMappingURL=PacketHandler.js.map
