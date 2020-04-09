@@ -65,6 +65,7 @@ class AutoAttack extends Bot_1.default {
     // internal functions
     UpdateAttackCooldown() {
         this.attackCooldown = (1 / this.attackSpeed) * 1000; // TODO: add TPS factor
+        //console.log("Attack speed: " + this.attackSpeed);
     }
     startAttack() {
         if (!this.isAttacking) {
@@ -88,6 +89,7 @@ class AutoAttack extends Bot_1.default {
             else {
                 this.stopAttack();
             }
+            //console.log("Attack speed: " + this.attackSpeed);
         }
     }
 }

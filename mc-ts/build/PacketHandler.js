@@ -49,11 +49,11 @@ function OnKick(packet) {
     console.log("Kicked for reason: " + packet.reason);
 }
 function OnError(err) {
-    console.log(err.message);
+    //console.log(err.message);
 }
 // variables
 // Entity handling
-let Entities = new Array();
+let Entities = new Map();
 // Events for bots to work
 function OnPosition(packet) {
     let x = packet.x;
@@ -73,49 +73,54 @@ function OnSpawnEntity(packet) {
     let location = new DataTypes_1.Location(X, Y, Z);
     let entity = new DataTypes_1.Entity(EntityID, location, type);
     //Entities.splice(EntityID, 0, entity);
-    Entities[EntityID] = entity;
+    Entities.set(EntityID, entity);
     client.bots.forEach(e => {
         e.OnSpawnEntity(entity);
     });
 }
 function OnEntityMove(packet) {
     let EntityID = packet.entityId;
-    if (Entities[EntityID]) {
+    if (Entities.has(EntityID)) {
         let Dx = packet.dX / (128 * 32);
         let Dy = packet.dY / (128 * 32);
         let Dz = packet.dZ / (128 * 32);
-        let l = Entities[EntityID].location;
+        let e = Entities.get(EntityID);
+        let l = e.location;
         l.X += Dx;
         l.Y += Dy;
         l.Z += Dz;
-        Entities[EntityID].location = l;
+        e.location = l;
+        Entities.set(EntityID, e);
         client.bots.forEach(e => {
-            e.OnEntityMove(Entities[EntityID]);
+            e.OnEntityMove(Entities.get(EntityID));
         });
     }
 }
 function OnEntityTeleport(packet) {
     let EntityID = packet.entityId;
-    if (Entities[EntityID]) {
+    if (Entities.has(EntityID)) {
         let x = packet.x;
         let y = packet.y;
         let z = packet.z;
-        Entities[EntityID].location = new DataTypes_1.Location(x, y, z);
+        let location = new DataTypes_1.Location(x, y, z);
+        let e = Entities.get(EntityID);
+        e.location = location;
+        Entities.set(EntityID, e);
         client.bots.forEach(e => {
-            e.OnEntityMove(Entities[EntityID]);
+            e.OnEntityMove(Entities.get(EntityID));
         });
     }
 }
 function OnDestroyEntity(packet) {
     let EntitiesID = packet.entityIds;
     EntitiesID.forEach(ID => {
-        if (Entities[ID]) {
+        if (Entities.has(ID)) {
             client.bots.forEach(e => {
-                let tmp = new DataTypes_1.Entity(Entities[ID].ID, Entities[ID].location, Entities[ID].typeID);
+                let entity = Entities.get(ID);
+                let tmp = new DataTypes_1.Entity(entity.ID, entity.location, entity.typeID);
                 e.OnDestroyEntity(tmp);
             });
-            //Entities.splice(ID, 1);
-            delete Entities[ID];
+            Entities.delete(ID);
         }
     });
 }
@@ -126,19 +131,30 @@ function OnEntityProperties(packet) {
         packet.properties.forEach(prop => {
             if (prop.modifiers.length > 0) {
                 // operation
+                let base = prop.value;
+                let op0 = [];
+                let op1 = [];
+                let op2 = [];
                 prop.modifiers.forEach(e => {
                     switch (e.operation) {
                         case 0:
-                            prop.value += e.amount;
+                            op0.push(e.amount);
                             break;
                         case 1:
-                            prop.value += (e.amount / 100);
+                            op1.push(e.amount);
                             break;
                         case 2:
-                            prop.value *= e.amount;
+                            op2.push(e.amount + 1);
                             break;
                     }
                 });
+                if (op0.length > 0)
+                    base += op0.reduce((a, b) => a + b);
+                if (op1.length > 0)
+                    base *= 1 + op1.reduce((a, b) => a + b);
+                if (op2.length > 0)
+                    base *= op2.reduce((a, b) => a * b);
+                prop.value = base;
             }
             delete prop.modifiers;
         });
