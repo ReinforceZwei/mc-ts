@@ -50,6 +50,9 @@
     <TypeScriptCompile Include="Bots\AutoAttack.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Bots\AutoEat.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Bots\AutoFish.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -62,7 +65,16 @@
     <TypeScriptCompile Include="CommandHandler.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Commands\changeslot.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Commands\health.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Commands\index.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Commands\inventory.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Commands\move.ts">
@@ -82,6 +94,9 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="lang\LangParser.ts" />
     <TypeScriptCompile Include="PacketHandler.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Settings.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="utils\AnsiColor.ts">

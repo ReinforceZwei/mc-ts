@@ -29,6 +29,16 @@ class Client {
     InteractEntity(ID, type = 1) {
         this.c.write('use_entity', { target: ID, mouse: type });
     }
+    /**
+     * Change current slot
+     * @param slot slot is zero-based
+     */
+    ChangeSlot(slot) {
+        if (slot >= 0 && slot <= 8) {
+            this.c.write('held_item_slot', { slotId: slot });
+            this.currentSlot = slot;
+        }
+    }
 }
 exports.default = Client;
 //# sourceMappingURL=Client.js.map

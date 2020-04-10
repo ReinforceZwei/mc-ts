@@ -1,6 +1,6 @@
 ﻿import * as mc from "minecraft-protocol";
 import Bot from './Bot';
-import { Location } from "./DataTypes";
+import { Location, Inventory } from "./DataTypes";
 
 /**
  * Extens default Client methods
@@ -10,6 +10,10 @@ export default class Client {
     bots: Bot[];
     playerLocation: Location;
     playerID: number;
+    inventory: Inventory;
+    currentSlot: number;
+    health: number;
+    hunger: number;
     constructor(client: mc.Client) {
         this.c = client;
     }
@@ -34,5 +38,15 @@ export default class Client {
     }
     InteractEntity(ID: number, type: number = 1) {
         this.c.write('use_entity', { target: ID, mouse: type });
+    }
+    /**
+     * Change current slot
+     * @param slot slot is zero-based
+     */
+    ChangeSlot(slot: number) {
+        if (slot >= 0 && slot <= 8) {
+            this.c.write('held_item_slot', { slotId: slot });
+            this.currentSlot = slot;
+        }
     }
 }

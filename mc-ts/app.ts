@@ -8,6 +8,7 @@ import * as PacketHandler from './PacketHandler';
 import * as BotHandler from './BotHandler';
 import JsonIO from './utils/JsonIO';
 import * as console from './utils/ConsoleIO2';
+import Settings from './Settings';
 
 let client: Client
 
@@ -22,10 +23,12 @@ let config: any;
 setTerminalTitle("MC-TS");
 process.title = "MC-TS";
 
+//JsonIO.write({ Settings }, 'test.json');
+
 console.OnLine(d => {
     CommandHandler.OnCommand(d.toString().trim());
 });
-console.setPrefix('> ');
+console.setPrefix('>');
 
 let args: string[] = process.argv.slice(2);
 if (args.length) {

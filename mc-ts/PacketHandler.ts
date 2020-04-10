@@ -1,5 +1,5 @@
 ﻿import Client from './Client';
-import { Entity, Location } from './DataTypes';
+import { Entity, Location, Inventory, Item } from './DataTypes';
 import ChatParser from './utils/ChatParser';
 import * as console from './utils/ConsoleIO2';
 let client: Client;
@@ -23,6 +23,12 @@ function SetHandler(_client: Client) {
     client.c.on('entity_destroy', OnDestroyEntity);
     // entity_update_attributes
     client.c.on('entity_update_attributes', OnEntityProperties);
+    // Inventory related
+    client.c.on('window_items', OnWindowItems);
+    client.c.on('set_slot', OnSetSlot);
+    client.c.on('held_item_slot', OnHeldItemSlot);
+    // player
+    client.c.on('update_health', OnUpdateHealth);
 }
 export { SetHandler }
 // Events that must be handled
@@ -154,4 +160,38 @@ function OnEntityProperties(packet) {
             e.OnEntityProperties(packet.properties);
         })
     }
+}
+// Inventory related
+function OnWindowItems(packet) {
+    if (packet.windowId == 0) {
+        let inventory: Inventory = new Inventory();
+        inventory.ID = 0;
+        packet.items.forEach((e, key) => {
+            if (e.present) {
+                inventory.Items.set(key, new Item(e.itemId, e.itemCount));
+            }
+        });
+        client.inventory = inventory;
+    }
+}
+function OnSetSlot(packet) {
+    if (packet.windowId == 0) {
+        if (packet.item.present) {
+            client.inventory.Items.set(packet.slot, new Item(packet.item.itemId, packet.item.itemCount));
+        } else {
+            if (client.inventory.Items.has(packet.slot)) {
+                client.inventory.Items.delete(packet.slot);
+            }
+        }
+    }
+}
+function OnHeldItemSlot(packet) {
+    client.currentSlot = packet.slot;
+}
+function OnUpdateHealth(packet) {
+    client.health = packet.health;
+    client.hunger = packet.food;
+    client.bots.forEach(e => {
+        e.OnUpdateHealth(packet.health, packet.food);
+    })
 }

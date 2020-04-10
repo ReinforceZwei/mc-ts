@@ -18,10 +18,11 @@ let offline = false;
 let config;
 setTerminalTitle("MC-TS");
 process.title = "MC-TS";
+//JsonIO.write({ Settings }, 'test.json');
 console.OnLine(d => {
     CommandHandler.OnCommand(d.toString().trim());
 });
-console.setPrefix('> ');
+console.setPrefix('>');
 let args = process.argv.slice(2);
 if (args.length) {
     switch (args.length) {

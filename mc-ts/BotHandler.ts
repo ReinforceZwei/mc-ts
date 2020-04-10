@@ -7,6 +7,7 @@ function SetHandler(_client: Client) {
     client = _client;
     LoadBot(new Bots.AutoFish());
     LoadBot(new Bots.AutoAttack());
+    LoadBot(new Bots.AutoEat());
     // Load more bot here
     //LoadBot(new Bots.MyBot());
 

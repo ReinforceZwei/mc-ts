@@ -48,6 +48,12 @@ class Bot {
      * @param properties
      */
     OnEntityProperties(properties) { }
+    /**
+     * Called when player health or hunger changed
+     * @param health 0-20, 0 means dead
+     * @param food 0-20
+     */
+    OnUpdateHealth(health, food) { }
 }
 exports.default = Bot;
 //# sourceMappingURL=Bot.js.map

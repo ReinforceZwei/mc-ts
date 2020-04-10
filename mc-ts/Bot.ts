@@ -57,4 +57,11 @@ export default abstract class Bot {
      * @param properties
      */
     OnEntityProperties(properties: Array<any>): void { }
+
+    /**
+     * Called when player health or hunger changed
+     * @param health 0-20, 0 means dead
+     * @param food 0-20
+     */
+    OnUpdateHealth(health: number, food: number): void { }
 }

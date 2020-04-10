@@ -4,6 +4,7 @@ const console = require("../utils/ConsoleIO2");
 const Bot_1 = require("../Bot");
 const DataTypes_1 = require("../DataTypes");
 const timers_1 = require("timers");
+const AutoEat_1 = require("./AutoEat");
 class AutoAttack extends Bot_1.default {
     constructor() {
         super();
@@ -81,9 +82,11 @@ class AutoAttack extends Bot_1.default {
     doAttack() {
         if (this.isAttacking) {
             if (this.attack.size > 0) {
-                this.attack.forEach(e => {
-                    this.client.InteractEntity(e.ID);
-                });
+                if (!AutoEat_1.default.isEating) {
+                    this.attack.forEach(e => {
+                        this.client.InteractEntity(e.ID);
+                    });
+                }
                 timers_1.setTimeout(() => { this.doAttack(); }, this.attackCooldown);
             }
             else {

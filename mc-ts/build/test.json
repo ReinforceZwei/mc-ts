@@ -1,0 +1,10 @@
+{
+    "Settings": {
+        "Username": "",
+        "Password": "",
+        "Host": "",
+        "Port": 25565,
+        "AutoAttack": true,
+        "AutoFish": true
+    }
+}

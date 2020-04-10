@@ -4,4 +4,6 @@ const AutoFish_1 = require("./AutoFish");
 exports.AutoFish = AutoFish_1.default;
 const AutoAttack_1 = require("./AutoAttack");
 exports.AutoAttack = AutoAttack_1.default;
+const AutoEat_1 = require("./AutoEat");
+exports.AutoEat = AutoEat_1.default;
 //# sourceMappingURL=index.js.map

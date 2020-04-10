@@ -2,6 +2,7 @@
 import Bot from '../Bot';
 import { Entity, Location } from '../DataTypes';
 import { setTimeout } from 'timers';
+import AutoEat from './AutoEat';
 
 export default class AutoAttack extends Bot {
     track: Map<number, Entity>;
@@ -84,9 +85,11 @@ export default class AutoAttack extends Bot {
     doAttack() {
         if (this.isAttacking) {
             if (this.attack.size > 0) {
-                this.attack.forEach(e => {
-                    this.client.InteractEntity(e.ID);
-                });
+                if (!AutoEat.isEating) {
+                    this.attack.forEach(e => {
+                        this.client.InteractEntity(e.ID);
+                    });
+                }
                 setTimeout(() => { this.doAttack() }, this.attackCooldown);
             } else {
                 this.stopAttack();

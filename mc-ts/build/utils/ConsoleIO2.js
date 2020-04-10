@@ -10,6 +10,7 @@ let history = [];
 let historyIndex = 0;
 let Keys = {
     'ctrlC': '\u0003',
+    'ctrlV': '\u0016',
     'enter': '\u000d',
     'backward': '\b',
     'tab': '\t',
@@ -22,9 +23,6 @@ let Keys = {
     'arrowRight': '\u001B\u005B\u0043',
     'esc': '\u001b'
 };
-stdin.setRawMode(true);
-stdin.resume();
-stdin.setEncoding('utf8');
 stdin.on("data", (key) => {
     switch (key) {
         case Keys.ctrlC:
@@ -37,8 +35,10 @@ stdin.on("data", (key) => {
             buffer2 = '';
             index = 0;
             cb(tmp);
-            if (tmp == '')
+            if (tmp == '') {
+                writeRaw("\r\x1b[K");
                 writeRaw(prefix);
+            }
             if (history[history.length - 1] != tmp && tmp != '') {
                 history.push(tmp);
                 historyIndex = history.length;
@@ -49,6 +49,15 @@ stdin.on("data", (key) => {
                 writeRaw('\b \b');
                 buffer = buffer.slice(0, -1);
                 index--;
+                writeRaw("\r\x1b[K");
+                writeRaw(prefix);
+                writeRaw(buffer + buffer2);
+                setCursor();
+            }
+            break;
+        case Keys.delete:
+            if (buffer2.length > 0) {
+                buffer2 = buffer2.substr(1);
                 writeRaw("\r\x1b[K");
                 writeRaw(prefix);
                 writeRaw(buffer + buffer2);
@@ -113,11 +122,13 @@ stdin.on("data", (key) => {
             break;
         default:
             if (key.charCodeAt() >= 32 && key.charCodeAt() <= 126) {
-                // normal char, write to buffer
-                buffer += key;
-                index++;
-                writeRaw(key + buffer2);
-                setCursor();
+                for (let i = 0; i < key.length; i++) {
+                    // normal char, write to buffer
+                    buffer += key[i];
+                    index++;
+                    writeRaw(key[i] + buffer2);
+                    setCursor();
+                }
             }
     }
 });
@@ -170,6 +181,9 @@ function setPrefix(_prefix = '>') {
 }
 exports.setPrefix = setPrefix;
 function start() {
+    stdin.setRawMode(true);
+    stdin.resume();
+    stdin.setEncoding('utf8');
     writeRaw(prefix);
 }
 exports.start = start;
