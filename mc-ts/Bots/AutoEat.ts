@@ -1,29 +1,36 @@
 ﻿import Bot from '../Bot';
 import * as console from '../utils/ConsoleIO2';
 import { Inventory, Item } from '../DataTypes';
+import { setTimeout } from 'timers';
 export default class AutoEat extends Bot {
     lastSlot: number;
     hungerThreshold: number = 6;
     eating: boolean = false;
     static isEating: boolean = false;
+    health: number;
+    food: number;
 
     Initialize() {
         console.log("[AutoEat] Loaded");
     }
 
     OnUpdateHealth(health: number, food: number) {
-        if (food < this.hungerThreshold || (health < 20 && food < 20)) {
-            // start eating
-            if (this.findFoodAndEat()) {
-                this.eating = true;
+        this.health = health;
+        this.food = food;
+        // first eat
+        if (((food < this.hungerThreshold) || (health < 20 && food < 20)) && !this.eating) {
+            this.eating = this.findFoodAndEat();
+            if (!this.eating) {
+                this.client.ChangeSlot(this.lastSlot);
             }
         }
         if (food < 20 && this.eating) {
-            // keep eating until full
-            if (!this.findFoodAndEat()) {
-                // ran out of food
-                this.eating = false;
-            }
+            setTimeout(() => {
+                this.eating = this.findFoodAndEat();
+                if (!this.eating) {
+                    this.client.ChangeSlot(this.lastSlot);
+                }
+            }, 200);
         }
         if (food >= 20 && this.eating) {
             this.eating = false;
@@ -53,5 +60,9 @@ export default class AutoEat extends Bot {
         }
         if (found) this.client.UseItem();
         return found;
+    }
+
+    eatUntilFull() {
+        let found = this.findFoodAndEat();
     }
 }

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Bot_1 = require("../Bot");
 const console = require("../utils/ConsoleIO2");
+const timers_1 = require("timers");
 class AutoEat extends Bot_1.default {
     constructor() {
         super(...arguments);
@@ -12,18 +13,22 @@ class AutoEat extends Bot_1.default {
         console.log("[AutoEat] Loaded");
     }
     OnUpdateHealth(health, food) {
-        if (food < this.hungerThreshold || (health < 20 && food < 20)) {
-            // start eating
-            if (this.findFoodAndEat()) {
-                this.eating = true;
+        this.health = health;
+        this.food = food;
+        // first eat
+        if (((food < this.hungerThreshold) || (health < 20 && food < 20)) && !this.eating) {
+            this.eating = this.findFoodAndEat();
+            if (!this.eating) {
+                this.client.ChangeSlot(this.lastSlot);
             }
         }
         if (food < 20 && this.eating) {
-            // keep eating until full
-            if (!this.findFoodAndEat()) {
-                // ran out of food
-                this.eating = false;
-            }
+            timers_1.setTimeout(() => {
+                this.eating = this.findFoodAndEat();
+                if (!this.eating) {
+                    this.client.ChangeSlot(this.lastSlot);
+                }
+            }, 200);
         }
         if (food >= 20 && this.eating) {
             this.eating = false;
@@ -55,6 +60,9 @@ class AutoEat extends Bot_1.default {
         if (found)
             this.client.UseItem();
         return found;
+    }
+    eatUntilFull() {
+        let found = this.findFoodAndEat();
     }
 }
 AutoEat.isEating = false;
