@@ -13,7 +13,9 @@ Features
 -
 * Auto fishing
 * Auto attack mobs
+* Auto eating
 * Full access to the chat with colors
+* Access to your inventory
 
 How to use?
  ---
@@ -25,3 +27,7 @@ How to use?
  4. Download/git clone this project
  5. Open cmd and go to the build/ folder
  6. Run `node app.js`
+
+ Disclaimer
+ -
+ We remind you that you **may get banned** by your server for using this program. Use accordingly with server rules.
