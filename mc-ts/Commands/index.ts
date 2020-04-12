@@ -5,6 +5,7 @@ import * as useitem from './useitem';
 import * as inventory from './inventory';
 import * as slot from './changeslot';
 import * as health from './health';
+import * as exp from './getlevel';
 
 export {
     quit,
@@ -13,5 +14,6 @@ export {
     useitem,
     inventory,
     slot,
-    health
+    health,
+    exp
 }

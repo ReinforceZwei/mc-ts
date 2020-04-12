@@ -14,4 +14,6 @@ const slot = require("./changeslot");
 exports.slot = slot;
 const health = require("./health");
 exports.health = health;
+const exp = require("./getlevel");
+exports.exp = exp;
 //# sourceMappingURL=index.js.map

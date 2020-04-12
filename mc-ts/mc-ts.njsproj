@@ -68,6 +68,9 @@
     <TypeScriptCompile Include="Commands\changeslot.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Commands\getlevel.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Commands\health.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

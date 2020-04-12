@@ -30,6 +30,7 @@ function SetHandler(_client) {
     client.c.on('held_item_slot', OnHeldItemSlot);
     // player
     client.c.on('update_health', OnUpdateHealth);
+    client.c.on('experience', OnExperience);
 }
 exports.SetHandler = SetHandler;
 // Events that must be handled
@@ -203,5 +204,8 @@ function OnUpdateHealth(packet) {
     client.bots.forEach(e => {
         e.OnUpdateHealth(packet.health, packet.food);
     });
+}
+function OnExperience(packet) {
+    client.level = packet.level;
 }
 //# sourceMappingURL=PacketHandler.js.map

@@ -14,6 +14,7 @@ export default class Client {
     currentSlot: number;
     health: number;
     hunger: number;
+    level: number;
     constructor(client: mc.Client) {
         this.c = client;
     }
