@@ -33,14 +33,12 @@ stdin.on("data", (key) => {
             buffer2 = '';
             index = 0;
             cb(tmp);
-            if (tmp == '') {
-                writeRaw("\r\x1b[K");
-                writeRaw(prefix);
-            }
+            writeRaw("\r\x1b[K");
+            writeRaw(prefix);
             if (history[history.length - 1] != tmp && tmp != '') {
                 history.push(tmp);
-                historyIndex = history.length;
             }
+            historyIndex = history.length;
             break;
         case Keys.backward:
             if (buffer.length > 0) {
