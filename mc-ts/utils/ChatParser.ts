@@ -60,7 +60,7 @@ enum Styles {
 export default function ParseChat(chat: ChatObject, parentStyle?: { colors?:Array<string>, style?:Array<string>}) {
     let colors: Array<string> = new Array<string>(); // color stack, clear on new style
     let style: Array<string> = new Array<string>(); // style stack, clear on new style
-    let text: Array<string> = new Array<string>(); // will store with color code
+    let text: string = ''; // will store with color code
 
     if (parentStyle && (parentStyle.colors.length > 0 || parentStyle.style.length > 0)) {
         colors = colors.concat(parentStyle.colors);
@@ -105,12 +105,12 @@ export default function ParseChat(chat: ChatObject, parentStyle?: { colors?:Arra
                     case 'f': tmpColor = Colors.white; break;
                     case 'r': tmpColor = Colors.reset; break;
                 }
-                tmp.push(color(txtpart[i + 1].trim(), tmpColor));
+                tmp.push(color(txtpart[i + 1], tmpColor));
             });
             if (tmp[0] == '') tmp.shift();
-            text.push(tmp.join(' '));
+            text += tmp.join('');
         } else {
-            text.push(color(chat.text.trim(), colors.concat(style).join('+')));
+            text += color(chat.text, colors.concat(style).join('+'));
         }
     }
     if (chat.translate) {
@@ -120,15 +120,15 @@ export default function ParseChat(chat: ChatObject, parentStyle?: { colors?:Arra
             chat.with.forEach(e => {
                 args.push(ParseChat(e));
             });
-            text.push(color(util.format(translatedText, ...args), colors.concat(style).join('+')));
+            text += color(util.format(translatedText, ...args), colors.concat(style).join('+'));
         } else {
-            text.push(color(translatedText, colors.concat(style).join('+')));
+            text += color(translatedText, colors.concat(style).join('+'));
         }
     }
     if (chat.extra) {
         chat.extra.forEach(e => {
-            text.push(ParseChat(e, { colors, style }));
+            text += ParseChat(e, { colors, style });
         });
     }
-    return text.join(' ');
+    return text;
 }

@@ -35,7 +35,7 @@ var Styles;
 function ParseChat(chat, parentStyle) {
     let colors = new Array(); // color stack, clear on new style
     let style = new Array(); // style stack, clear on new style
-    let text = new Array(); // will store with color code
+    let text = ''; // will store with color code
     if (parentStyle && (parentStyle.colors.length > 0 || parentStyle.style.length > 0)) {
         colors = colors.concat(parentStyle.colors);
         style = style.concat(parentStyle.style);
@@ -118,14 +118,14 @@ function ParseChat(chat, parentStyle) {
                         tmpColor = Colors.reset;
                         break;
                 }
-                tmp.push(AnsiColor_1.default(txtpart[i + 1].trim(), tmpColor));
+                tmp.push(AnsiColor_1.default(txtpart[i + 1], tmpColor));
             });
             if (tmp[0] == '')
                 tmp.shift();
-            text.push(tmp.join(' '));
+            text += tmp.join('');
         }
         else {
-            text.push(AnsiColor_1.default(chat.text.trim(), colors.concat(style).join('+')));
+            text += AnsiColor_1.default(chat.text, colors.concat(style).join('+'));
         }
     }
     if (chat.translate) {
@@ -135,18 +135,18 @@ function ParseChat(chat, parentStyle) {
             chat.with.forEach(e => {
                 args.push(ParseChat(e));
             });
-            text.push(AnsiColor_1.default(util.format(translatedText, ...args), colors.concat(style).join('+')));
+            text += AnsiColor_1.default(util.format(translatedText, ...args), colors.concat(style).join('+'));
         }
         else {
-            text.push(AnsiColor_1.default(translatedText, colors.concat(style).join('+')));
+            text += AnsiColor_1.default(translatedText, colors.concat(style).join('+'));
         }
     }
     if (chat.extra) {
         chat.extra.forEach(e => {
-            text.push(ParseChat(e, { colors, style }));
+            text += ParseChat(e, { colors, style });
         });
     }
-    return text.join(' ');
+    return text;
 }
 exports.default = ParseChat;
 //# sourceMappingURL=ChatParser.js.map
