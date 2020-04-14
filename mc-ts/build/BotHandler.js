@@ -17,6 +17,10 @@ exports.SetHandler = SetHandler;
 function LoadBot(b) {
     bots.push(b);
 }
+function UnLoadAllBot() {
+    bots = [];
+}
+exports.UnLoadAllBot = UnLoadAllBot;
 function InitializeBots() {
     bots.forEach(e => {
         e.SetHandler(client);

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const DataTypes_1 = require("./DataTypes");
 const ChatParser_1 = require("./utils/ChatParser");
+const app_1 = require("./app");
 const console = require("./utils/ConsoleIO2");
 let client;
 function SetHandler(_client) {
@@ -50,7 +51,7 @@ function OnChat(packet) {
 }
 function OnDisconnect() {
     console.log('You have been disconnected from the server.');
-    process.exit(0);
+    app_1.OnDisconnect();
 }
 function OnKick(packet) {
     console.log("Kicked for reason: " + packet.reason);

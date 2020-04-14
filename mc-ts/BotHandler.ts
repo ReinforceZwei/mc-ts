@@ -14,10 +14,13 @@ function SetHandler(_client: Client) {
     InitializeBots();
     client.bots = bots;
 }
-export { SetHandler }
 
 function LoadBot(b: Bot) {
     bots.push(b);
+}
+
+function UnLoadAllBot() {
+    bots = [];
 }
 
 function InitializeBots() {
@@ -26,3 +29,5 @@ function InitializeBots() {
         e.Initialize();
     })
 }
+
+export { SetHandler, UnLoadAllBot }

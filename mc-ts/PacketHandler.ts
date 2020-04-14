@@ -1,6 +1,7 @@
 ﻿import Client from './Client';
 import { Entity, Location, Inventory, Item } from './DataTypes';
 import ChatParser from './utils/ChatParser';
+import { OnDisconnect as Disconnect }  from './app';
 import * as console from './utils/ConsoleIO2';
 let client: Client;
 function SetHandler(_client: Client) {
@@ -49,7 +50,7 @@ function OnChat(packet: any) {
 }
 function OnDisconnect() {
     console.log('You have been disconnected from the server.');
-    process.exit(0);
+    Disconnect();
 }
 function OnKick(packet: any) {
     console.log("Kicked for reason: " + packet.reason);

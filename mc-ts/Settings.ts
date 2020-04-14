@@ -16,3 +16,27 @@ let Setting: Settings = {
     AutoFish: true
 }
 export default Setting;
+
+let setting = {
+    'account': {
+        'username': '',
+        'password': ''
+    },
+    'server': {
+        'host': '',
+        'port': 25565
+    },
+    'autobots': {
+        'autoattack': {
+            'enabled': true,
+            'range': 4
+        },
+        'autofish': {
+            'enabled': true
+        },
+        'autoeat': {
+            'enabled': true,
+            'hunger': 6
+        }
+    }
+}

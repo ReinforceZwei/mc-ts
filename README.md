@@ -14,6 +14,7 @@ Features
 * Auto fishing
 * Auto attack mobs
 * Auto eating
+* Auto reconnect on disconnect
 * Full access to the chat with colors
 * Access to your inventory
 

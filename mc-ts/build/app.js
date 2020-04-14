@@ -68,16 +68,15 @@ else {
     }
 }
 if (CheckInfo()) {
-    if (!password) {
-        console.log("Using offline mode");
-        console.log("Logging in...");
-        client = new Client_1.default(mc.createClient({
-            "username": username,
-            "host": host,
-            "port": port
-        }));
-    }
-    else {
+    Login();
+}
+else {
+    console.log("Still did not get enough infomation, exiting...");
+    process.exit(1);
+}
+console.start();
+function Login() {
+    if (!password || password != '-') {
         console.log("Using online mode");
         console.log("Logging in...");
         client = new Client_1.default(mc.createClient({
@@ -87,43 +86,28 @@ if (CheckInfo()) {
             "port": port
         }));
     }
+    else {
+        console.log("Using offline mode");
+        console.log("Logging in...");
+        client = new Client_1.default(mc.createClient({
+            "username": username,
+            "host": host,
+            "port": port
+        }));
+    }
+    CommandHandler.SetHandler(client);
+    BotHandler.SetHandler(client);
+    // packet handler must be the last to set
+    PacketHandler.SetHandler(client);
 }
-else {
-    console.log("Still did not get enough infomation, exiting...");
-    process.exit(1);
+function OnDisconnect() {
+    BotHandler.UnLoadAllBot();
+    console.log("Attempt to reconnect after 30 seconds...");
+    setTimeout(() => {
+        Login();
+    }, 30000);
 }
-/*
-// listen console input
-let stdin: NodeJS.Socket = process.openStdin();
-stdin.addListener("data", (d: string) => {
-    CommandHandler.OnCommand(d.toString().trim());
-    //process.stdout.write("\r\x1b[K");
-});
-
-let rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-    terminal: true
-});
-rl.prompt();
-rl.on('line', (d: string) => {
-    CommandHandler.OnCommand(d.toString().trim());
-    //rl.prompt();
-}).on('close', () => {
-    client.c.end('User terminate');
-    process.exit(0);
-});
-setInterval(() => {
-    rl.pause();
-    rl.write('LOLOLOL\n');
-    rl.resume();
-}, 5000);
-*/
-CommandHandler.SetHandler(client);
-BotHandler.SetHandler(client);
-// packet handler must be the last to set
-PacketHandler.SetHandler(client);
-console.start();
+exports.OnDisconnect = OnDisconnect;
 function AskLoginInfo() {
     username = readlineSync.question("Email (or username for offline mode): ");
     let _password = readlineSync.question("Password (input '-' for offline mode): ", { hideEchoBack: true });
